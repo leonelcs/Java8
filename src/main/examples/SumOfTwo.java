@@ -23,14 +23,9 @@ public class SumOfTwo {
 		
 		List<Integer> listB = IntStream.of(b).boxed().collect(Collectors.toList());
 
-		List<Integer> aOpt = new ArrayList<>();
-		
-		listB.stream()
-			.map(lb -> v - lb)
-			.forEach(t -> aOpt.add(t));
-		
-		Optional<Integer> result = aOpt.stream()
-			.filter(o -> setA.contains(o))
+	
+		Optional<Integer> result = listB.stream()
+			.filter(o -> setA.contains(v - o))
 			.findFirst();
 		
 		if (result.isPresent()) {
