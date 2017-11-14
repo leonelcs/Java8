@@ -13,17 +13,12 @@ public class Exercicio1 {
 		
 		Set<Integer> set = new HashSet<>();
 		inMaintenanceDrones.stream().forEach( m -> set.add(m));
-		List<Integer> sortedList = new ArrayList<>();
-		drones
+		return drones
 			.stream()
 			.filter( d -> !set.contains(d.getId()) )
-			.sorted(Comparator.comparingInt( d2 -> Integer.valueOf( ((Drone) d2).getFlightRange() ) ).reversed())
-			.forEach( d2 -> sortedList.add(Integer.valueOf(d2.getId())) );
-
-		List<Integer> result = new ArrayList<Integer>(sortedList.subList(0, numberOfRequiredDrones));
-		
-		
-        return result;
+			.sorted(Comparator.comparingInt(Drone::getFlightRange).reversed())
+			.map(d -> Integer.valueOf(d.getId()))
+			.collect(Collectors.toList()).subList(0, numberOfRequiredDrones);
 
     }
 
