@@ -13,34 +13,24 @@ public class Solution {
 	 */
 
 	static int minimumNumberOfTrips(int tripMaxWeight, int[] packagesWeight) {
-		int count = 0;
-		List<Integer> list = new ArrayList<>();
-		List<Integer> list2 = new ArrayList<>();
-		for (int i=0; i< packagesWeight.length; i++) {
-			list.add(packagesWeight[i]);
-		}
-		
-		Collections.sort(list);
-		list2 = list;
+		List<Integer> trips = new ArrayList<>();
+		List<Integer> packagesSorted = Arrays.stream(packagesWeight).boxed().sorted((a, b) -> -Integer.compare(a, b))
+				.collect(Collectors.toList());
 
-		for (int i=list.size()-1;i>=0;i--) {
-			Integer aux = list.get(i);
-			Optional<Integer> value = list.stream().filter( l -> l <= tripMaxWeight - aux )
-				.findFirst();
-			if (value.isPresent()) {
-				count +=1;
-				list2.remove(value.get());
-				list2.remove(list.get(i));
-				if (list2.size()==0)
-					return count;
+		for (int pack : packagesSorted) {
+
+			OptionalInt pos = IntStream.range(0, trips.size())
+					.filter(ind -> trips.get(ind) + pack <= tripMaxWeight)
+					.findFirst();
+
+			if (pos.isPresent()) {
+				trips.set(pos.getAsInt(), trips.get(pos.getAsInt()) + pack);
 			} else {
-				count +=1;
-				list2.remove(list.get(i));
+				trips.add(pack);
 			}
-
 		}
-		return count; 
 
+		return trips.size();
 	}
 
 	public static void main(String[] args) {
